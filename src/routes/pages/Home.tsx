@@ -5,7 +5,7 @@ export default function Home() {
     const setTitle = useHeaderStore(state => state.setTitle)
 
     useEffect(() => {
-        setTitle('Home')
+        setTitle('홈')
     }, [setTitle])
 
     return (

@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { useNavigate, Outlet, Navigate } from 'react-router-dom'
+import { Outlet, useNavigate } from 'react-router-dom'
 import { onAuthStateChanged } from 'firebase/auth'
 import { auth } from '@/api/firebaseApp'
 import type { User } from 'firebase/auth'
@@ -10,15 +10,20 @@ export default function RequiresAuth() {
   const navigate = useNavigate()
 
   useEffect(() => {
-    setIsLoading(true)
-    onAuthStateChanged(auth, user => {
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
       setUser(user)
       setIsLoading(false)
-    })
+      if (!user) {
+        navigate('/sign-in')
+      }
+    });
+
+    return () => unsubscribe()
   }, [navigate])
 
   if (isLoading) {
-    return <div>Loading...</div>
+    return <div>로딩중😘</div>
   }
-  return user ? <Outlet /> : <Navigate to="/sign-in" />
+
+  return user ? <Outlet /> : null
 }
