@@ -1,4 +1,3 @@
-/** @jsxImportSource @emotion/react */
 import { signInWithGoogleAndCreateUser } from '@/api/firebaseAuth';
 import { useNavigate } from 'react-router-dom';
 import googleLogo from '@/assets/googleLogo.png';
