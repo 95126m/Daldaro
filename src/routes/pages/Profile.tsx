@@ -1,4 +1,4 @@
-import LongButton from '@/components/LongButton'
+import LongButton from '@/components/common/LongButton'
 import { css } from '@emotion/react'
 import { signOut } from 'firebase/auth'
 import { auth } from '@/api/firebaseApp'
