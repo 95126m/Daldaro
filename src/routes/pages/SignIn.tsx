@@ -1,23 +1,33 @@
-import { loginWithEmailAndPassword, signInWithGoogleAndCreateUser } from '@/api/firebaseAuth';
-import { useNavigate, useLocation } from 'react-router-dom';
-import { useState, useEffect } from 'react';
-import logo from '@/assets/logo-yellow.png';
-import LongButton from '@/components/common/LongButton';
-import { css } from '@emotion/react';
+import { useState, useEffect, useRef } from 'react'
+import { loginWithEmailAndPassword, signInWithGoogleAndCreateUser } from '@/api/firebaseAuth'
+import { useNavigate, useLocation } from 'react-router-dom'
+import logo from '@/assets/logo-yellow.png'
+import LongButton from '@/components/common/LongButton'
+import { css } from '@emotion/react'
 import styled from '@emotion/styled'
-import theme from '@/styles/Theme';
-import { FaCheckCircle } from 'react-icons/fa';
+import theme from '@/styles/Theme'
+import { FaCheckCircle } from 'react-icons/fa'
 import { ToastContainer, toast } from 'react-toastify'
-import 'react-toastify/dist/ReactToastify.css';
+import 'react-toastify/dist/ReactToastify.css'
 
-  export default function SignIn() {
-  const navigate = useNavigate();
-  const location = useLocation();
+export default function SignIn() {
+  const navigate = useNavigate()
+  const location = useLocation()
 
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [error, setError] = useState<string | null>(null);
-  
+  const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
+  const [error, setError] = useState<string | null>(null)
+
+  const initialEmail = useRef(email)
+  const initialpassword = useRef(password)
+  const [isModified, setIsModified] = useState(false)
+
+  useEffect(() => {
+    setIsModified(
+      email !== initialEmail.current || password !== initialpassword.current
+    )
+  }, [email, password])
+
   useEffect(() => {
     if (location.state?.showToast) {
       toast(
@@ -32,19 +42,19 @@ import 'react-toastify/dist/ReactToastify.css';
           progress: undefined,
           closeButton: false
         }
-      );
+      )
     }
-  }, [location.state]);
+  }, [location.state])
 
   async function handleNormalSignIn() {
     try {
-      await loginWithEmailAndPassword(email, password);
+      await loginWithEmailAndPassword(email, password)
       navigate('/'); 
     } catch (err) {
-      setError('로그인 실패!');
-      console.error(err);
+      setError('로그인 실패!')
+      console.error(err)
     }
-  };
+  }
 
   async function handleGoogleSignIn() {
     try {
@@ -56,7 +66,7 @@ import 'react-toastify/dist/ReactToastify.css';
   }
 
   const handleNewAccount = () => {
-    navigate('/new-account');
+    navigate('/new-account')
     }
     
   const StyledToastContainer = styled(ToastContainer)`
@@ -68,8 +78,9 @@ import 'react-toastify/dist/ReactToastify.css';
     --toastify-color-progress-light: linear-gradient(
       to right, #ffc71d, #FDDE76
     );
-  `;
-    
+  `
+
+
   return (
     <div css={containerStyle}>
       <div css={contentStyle}>
@@ -82,20 +93,20 @@ import 'react-toastify/dist/ReactToastify.css';
           type="text"
           placeholder="이메일을 입력해주세요."
           css={emailInputStyle}
-          value={email} // 상태로 이메일 값 관리
-          onChange={(e) => setEmail(e.target.value)} // 입력값 변경 시 상태 업데이트
+          value={email} 
+          onChange={(e) => setEmail(e.target.value)} 
         />
         <div style={{ marginBottom: '10px', color: '#ffc71d', fontWeight: 'bold' }}>비밀번호</div>
         <input
           type="password"
           placeholder="비밀번호를 입력해주세요."
           css={passwordInputStyle}
-          value={password} // 상태로 비밀번호 값 관리
-          onChange={(e) => setPassword(e.target.value)} // 입력값 변경 시 상태 업데이트
+          value={password} 
+          onChange={(e) => setPassword(e.target.value)} 
         />
         {error && <p css={errorStyle}>{error}</p>}
         <div css={middleBtn}>
-          <LongButton onClick={handleNormalSignIn} css={loginButtonStyle}>로그인</LongButton>
+          <LongButton type="submit" disabled={!isModified} onClick={handleNormalSignIn} css={loginButtonStyle}>로그인</LongButton>
           <div css={or}>또는</div>
           <LongButton onClick={handleGoogleSignIn} css={googleButtonStyle}>
           Google 로그인
