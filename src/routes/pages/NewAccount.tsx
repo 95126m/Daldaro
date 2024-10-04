@@ -161,7 +161,7 @@ export default function NewAccount() {
           isOpen={showConfirmModal}
           onClose={handleCloseModal} 
           onConfirm={handleConfirmLeave} 
-          title="변경 사항이 있어요! 😦" 
+          title="작성중이던 내용이 있어요! 😦" 
           description="페이지를 나가면 내용이 저장되지않아요." 
         />
       )}

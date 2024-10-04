@@ -77,14 +77,14 @@ export default function SignIn() {
     --toastify-toast-width: 230px;
     --toastify-color-progress-light: linear-gradient(
       to right, #ffc71d, #FDDE76
-    );
+    )
   `
 
 
   return (
     <div css={containerStyle}>
       <div css={contentStyle}>
-        <img css={logoStyle} src={logo} alt="Logo" data-testid="main-logo" />
+        <img css={logoStyle} src={logo} alt="Logo" />
       </div>
 
       <div css={buttonStyle}>
