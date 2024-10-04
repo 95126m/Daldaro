@@ -46,7 +46,7 @@ export default function NewAccount() {
         setPreviewPhoto(photoURL); // 저장 후 미리보기 업데이트
       }
 
-      navigate('/sign-in')
+      navigate('/sign-in', {state: { showToast: true }})
     } catch (err) {
       setError('회원가입 실패!');
       console.error(err);
@@ -116,7 +116,7 @@ export default function NewAccount() {
         <div css={buttonWrapperStyle}>
           <LongButton type="submit">가입하기</LongButton>
         </div>
-      </form>
+      </form>      
     </div>
   );
 }
