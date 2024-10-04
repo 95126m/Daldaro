@@ -29,4 +29,6 @@ dist-ssr
 /playwright-report/
 /blob-report/
 /playwright/.cache/
+
+.env
 >>>>>>> b9087ceb78ae9042c1ccd789baf416d44079e292

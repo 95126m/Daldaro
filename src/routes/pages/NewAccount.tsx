@@ -55,10 +55,9 @@ export default function NewAccount() {
         createdAt: new Date(),
       })
 
-      // 선택된 파일이 있으면 프로필 사진 업로드
       if (file) {
         const photoURL = await updateProfilePhoto(signedUpUser.uid, file)
-        setPreviewPhoto(photoURL); // 저장 후 미리보기 업데이트
+        setPreviewPhoto(photoURL);
       }
 
       navigate('/sign-in', {state: { showToast: true }})
@@ -170,13 +169,14 @@ export default function NewAccount() {
   )
 }
 const containerStyle = css`
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  position: relative;
   width: 100%;
-  height: auto;
-  margin-top: 7rem;
+  max-width: 430px;
+  margin: 0 auto;
+  padding-top: 6rem;
   background-color: ${theme.colors.white};
+  height: 100%;
+  overflow-y: auto;
 `;
 
 const formStyle = css`
@@ -193,7 +193,7 @@ const formStyle = css`
 const inputWrapperStyle = css`
   display: flex;
   flex-direction: column;
-  width: 100%;
+  width: 84%;
   margin-top: 3rem;
 `;
 
