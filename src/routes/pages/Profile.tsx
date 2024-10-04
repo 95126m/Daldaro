@@ -11,7 +11,7 @@ export default function Profile() {
     const setTitle = useHeaderStore(state => state.setTitle)
 
     useEffect(() => {
-        setTitle('Profile')
+        setTitle('프로필')
     }, [setTitle])
 
     const user = auth.currentUser
@@ -19,7 +19,7 @@ export default function Profile() {
 
     async function logOut() {
         await signOut(auth)
-        navigate('/SignIn')
+        navigate('/sign-in')
     }
 
     return (
