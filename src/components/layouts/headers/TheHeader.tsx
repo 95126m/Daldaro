@@ -5,13 +5,12 @@ import { CgChevronLeft } from 'react-icons/cg'
 import { useHeaderStore } from '@/stores/header'
 
 type TheHeaderProps = {
-  onOpenModal: () => void
+  onOpenModal?: () => void
 }
 
 enum titleName {
   NewAccount = '회원가입',
-  Profile = '프로필',
-  Home = '홈',
+  Profile = '프로필'
 }
 
 export default function TheHeader({ onOpenModal }: TheHeaderProps) {
