@@ -4,18 +4,26 @@ import { useNavigate } from 'react-router-dom'
 import { CgChevronLeft } from 'react-icons/cg'
 import { useHeaderStore } from '@/stores/header'
 
+type TheHeaderProps = {
+  onOpenModal: () => void
+}
+
 enum titleName {
   NewAccount = '회원가입',
   Profile = '프로필',
   Home = '홈',
 }
 
-export default function TheHeader() {
+export default function TheHeader({ onOpenModal }: TheHeaderProps) {
   const title = useHeaderStore(state => state.title)
   const navigate = useNavigate()
 
   const handleBackClick = () => {
-    navigate(-1)
+    if (onOpenModal) {
+      onOpenModal()
+    } else {
+      navigate(-1)
+    }
   }
 
   return (

@@ -1,35 +1,50 @@
-import { useState, useRef, useEffect } from 'react';
-import { updateProfilePhoto, signUpWithEmailAndPassword } from '@/api/firebaseAuth';
-import { useNavigate } from 'react-router-dom';
-import { useHeaderStore } from '@/stores/header';
-import LongButton from '@/components/common/LongButton';
-import { css } from '@emotion/react';
-import theme from '@/styles/Theme';
-import { FaCamera } from 'react-icons/fa';
-import { doc, setDoc } from 'firebase/firestore';
-import { db } from '@/api/firebaseApp';
+import { useState, useRef, useEffect } from 'react'
+import { updateProfilePhoto, signUpWithEmailAndPassword } from '@/api/firebaseAuth'
+import { useNavigate } from 'react-router-dom'
+import { useHeaderStore } from '@/stores/header'
+import LongButton from '@/components/common/LongButton'
+import { css } from '@emotion/react'
+import theme from '@/styles/Theme'
+import { FaCamera } from 'react-icons/fa'
+import { doc, setDoc } from 'firebase/firestore'
+import { db } from '@/api/firebaseApp'
+import Modal from '@/components/common/Modal'
+import TheHeader from '@/components/layouts/headers/TheHeader'
 
 export default function NewAccount() {
-  const setTitle = useHeaderStore((state) => state.setTitle);
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [displayName, setDisplayName] = useState('');
-  const [error, setError] = useState<string | null>(null);
-  const [previewPhoto, setPreviewPhoto] = useState<string>('');
-  const [file, setFile] = useState<File | null>(null);
-  const fileInputRef = useRef<HTMLInputElement>(null);
+  const setTitle = useHeaderStore((state) => state.setTitle)
+  const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
+  const [displayName, setDisplayName] = useState('')
+  const [error, setError] = useState<string | null>(null)
+  const [previewPhoto, setPreviewPhoto] = useState<string>('')
+  const [file, setFile] = useState<File | null>(null)
+  const fileInputRef = useRef<HTMLInputElement>(null)
 
-  const navigate = useNavigate();
+  const [showConfirmModal, setShowConfirmModal] = useState(false)
+  const initialDisplayName = useRef(displayName)
+  const initialEmail = useRef(email)
+  const initialPhotoURL = useRef(previewPhoto)
+  const [isModified, setIsModified] = useState(false)
+
+  const navigate = useNavigate()
 
   useEffect(() => {
-    setTitle('회원가입');
-  }, [setTitle]);
+    setTitle('회원가입')
+  }, [setTitle])
+
+  useEffect(() => {
+    setIsModified(
+      displayName !== initialDisplayName.current || email !== initialEmail.current || previewPhoto !== initialPhotoURL.current
+    );
+  }, [displayName, email, previewPhoto])
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
+    e.preventDefault()
+    if (!displayName || !email || !previewPhoto) return
     try {
       // 회원가입 진행
-      const signedUpUser = await signUpWithEmailAndPassword(email, password, displayName);
+      const signedUpUser = await signUpWithEmailAndPassword(email, password, displayName)
       
       // Firestore에 사용자 정보 저장
       await setDoc(doc(db, 'Users', signedUpUser.uid), {
@@ -38,42 +53,60 @@ export default function NewAccount() {
         uid: signedUpUser.uid,
         photoURL: previewPhoto || '',
         createdAt: new Date(),
-      });
+      })
 
       // 선택된 파일이 있으면 프로필 사진 업로드
       if (file) {
-        const photoURL = await updateProfilePhoto(signedUpUser.uid, file);
+        const photoURL = await updateProfilePhoto(signedUpUser.uid, file)
         setPreviewPhoto(photoURL); // 저장 후 미리보기 업데이트
       }
 
       navigate('/sign-in', {state: { showToast: true }})
     } catch (err) {
-      setError('회원가입 실패!');
-      console.error(err);
+      setError('회원가입 실패!')
+      console.error(err)
     }
-  };
+  }
 
   const handlePhotoClick = () => {
     if (fileInputRef.current) {
-      fileInputRef.current.click();
+      fileInputRef.current.click()
     }
-  };
+  }
 
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const selectedFile = event.target.files?.[0];
+    const selectedFile = event.target.files?.[0]
     if (selectedFile) {
-      setFile(selectedFile); // 파일 상태에 저장
-      const fileURL = URL.createObjectURL(selectedFile); // 브라우저에서 미리보기 URL 생성
-      setPreviewPhoto(fileURL); // 미리보기 이미지 설정
+      setFile(selectedFile) 
+      const fileURL = URL.createObjectURL(selectedFile) 
+      setPreviewPhoto(fileURL) 
     }
-  };
+  }
+
+  const handleOpenModal = () => {
+    if (isModified) {
+      setShowConfirmModal(true)
+    } else {
+      navigate(-1)
+    }
+  }
+
+  const handleCloseModal = () => {
+    setShowConfirmModal(false)
+  }
+
+  const handleConfirmLeave = () => {
+    setShowConfirmModal(false)
+    navigate(-1)
+  }
 
   return (
     <div css={containerStyle}>
+      <TheHeader onOpenModal={handleOpenModal} />
       <form onSubmit={handleSubmit} css={formStyle}>
         <div css={photoContainerStyle}>
           <img
-            src={previewPhoto || '/src/assets/default-profile.jpg'} // 기본 이미지 경로 지정
+            src={previewPhoto || '/src/assets/default-profile.jpg'} 
             alt="프로필 사진"
             css={profilePhoto}
             onClick={handlePhotoClick}
@@ -90,6 +123,7 @@ export default function NewAccount() {
           />
         </div>
         <div css={inputWrapperStyle}>
+          <div style={{ marginBottom: '10px', color: '#ffc71d', fontWeight: 'bold' }}>닉네임</div>
           <input
             type="text"
             placeholder="닉네임"
@@ -97,6 +131,8 @@ export default function NewAccount() {
             onChange={(e) => setDisplayName(e.target.value)}
             css={inputStyle}
           />
+
+          <div style={{ marginBottom: '10px', color: '#ffc71d', fontWeight: 'bold' }}>이메일</div>
           <input
             type="text"
             placeholder="이메일"
@@ -104,6 +140,8 @@ export default function NewAccount() {
             onChange={(e) => setEmail(e.target.value)}
             css={inputStyle}
           />
+
+          <div style={{ marginBottom: '10px', color: '#ffc71d', fontWeight: 'bold' }}>비밀번호</div>
           <input
             type="password"
             placeholder="비밀번호"
@@ -114,11 +152,22 @@ export default function NewAccount() {
         </div>
         {error && <p>{error}</p>}
         <div css={buttonWrapperStyle}>
-          <LongButton type="submit">가입하기</LongButton>
+          <LongButton type="submit" disabled={!displayName || !email || !password}>가입하기</LongButton>
         </div>
-      </form>      
+      </form>   
+      
+      {showConfirmModal && (
+        <Modal 
+          isOpen={showConfirmModal}
+          onClose={handleCloseModal} 
+          onConfirm={handleConfirmLeave} 
+          title="변경 사항이 있어요! 😦" 
+          description="페이지를 나가면 내용이 저장되지않아요." 
+        />
+      )}
+
     </div>
-  );
+  )
 }
 const containerStyle = css`
   display: flex;
