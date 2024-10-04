@@ -7,7 +7,9 @@ import Home from '@/routes/pages/Home';
 import Search from '@/routes/pages/Search';
 import Cart from '@/routes/pages/Cart';
 import Profile from '@/routes/pages/Profile';
-import Service from '@/routes/pages/Service';
+import Notice from '@/routes/pages/Notice';
+import AddItem from '@/routes/pages/AddItem';
+import AddNotice from '@/routes/pages/AddNotice';
 
 import NotFound from '@/routes/pages/NotFound';
 import dayjs from 'dayjs';
@@ -27,7 +29,9 @@ export const router = createBrowserRouter([
           { path: '/search', element: <Search /> },
           { path: '/cart', element: <Cart /> },
           { path: '/profile', element: <Profile /> },
-          { path: '/service', element: <Service /> },
+          { path: '/notice', element: <Notice /> },
+          { path: '/add-item', element: <AddItem /> },
+          { path: '/add-notice', element: <AddNotice /> },
         ],
       },
     ],
