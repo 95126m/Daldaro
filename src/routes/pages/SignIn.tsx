@@ -1,22 +1,45 @@
 import { loginWithEmailAndPassword, signInWithGoogleAndCreateUser } from '@/api/firebaseAuth';
-import { useNavigate } from 'react-router-dom';
-import { useState } from 'react';
+import { useNavigate, useLocation } from 'react-router-dom';
+import { useState, useEffect } from 'react';
 import logo from '@/assets/logo-yellow.png';
 import LongButton from '@/components/common/LongButton';
 import { css } from '@emotion/react';
+import styled from '@emotion/styled'
 import theme from '@/styles/Theme';
+import { FaCheckCircle } from 'react-icons/fa';
+import { ToastContainer, toast } from 'react-toastify'
+import 'react-toastify/dist/ReactToastify.css';
 
-export default function SignIn() {
+  export default function SignIn() {
   const navigate = useNavigate();
+  const location = useLocation();
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState<string | null>(null);
+  
+  useEffect(() => {
+    if (location.state?.showToast) {
+      toast(
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', width: '100%' }}>
+          <FaCheckCircle style={{ marginRight: '10px' }} /> 
+          환영합니다!
+        </div>,
+        {
+          position: "bottom-center",  
+          autoClose: 2000,           
+          hideProgressBar: false,     
+          progress: undefined,
+          closeButton: false
+        }
+      );
+    }
+  }, [location.state]);
 
   async function handleNormalSignIn() {
     try {
       await loginWithEmailAndPassword(email, password);
-      navigate('/'); // 로그인 후 홈으로 이동
+      navigate('/'); 
     } catch (err) {
       setError('로그인 실패!');
       console.error(err);
@@ -34,8 +57,19 @@ export default function SignIn() {
 
   const handleNewAccount = () => {
     navigate('/new-account');
-  }
-
+    }
+    
+  const StyledToastContainer = styled(ToastContainer)`
+    .Toastify__toast {
+      background-color: rgba(0, 0, 0, 0.6); 
+      color: white; 
+    }
+    --toastify-toast-width: 230px;
+    --toastify-color-progress-light: linear-gradient(
+      to right, #ffc71d, #FDDE76
+    );
+  `;
+    
   return (
     <div css={containerStyle}>
       <div css={contentStyle}>
@@ -75,6 +109,8 @@ export default function SignIn() {
         <span css={dividerStyle}>|</span>
         <button css={findPasswordButtonStyle}>비밀번호 찾기</button>
       </div>
+
+      <StyledToastContainer />
 
     </div>
   )
@@ -138,6 +174,21 @@ const bottomBtn = css`
   z-index: 2;
 `;
 
+const floatingAnimation = css`
+  @keyframes floating {
+    0% {
+      top: 20%; 
+    }
+    50% {
+      top: 18%;  
+    }
+    100% {
+      top: 20%;  
+    }
+  }
+  animation: floating 3s ease-in-out infinite;  
+`;
+
 const logoStyle = css`
   position: absolute;
   top: 20%;
@@ -145,6 +196,7 @@ const logoStyle = css`
   height: auto;
   width: 20rem;
   transform: translate(-50%, -50%);
+  ${floatingAnimation};
 `;
 
 const inputStyle = css`
