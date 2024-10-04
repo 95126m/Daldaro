@@ -15,10 +15,10 @@ export default function App() {
       setTimeout(() => {
         setIsSplash(false); 
         if (!user) {
-          navigate('/sign-in'); 
+          navigate('/sign-in')
         }
-      }, 3000); // 3초 동안 스플래시 화면 유지
-    });
+      }, 2000)
+    })
       
     return () => {
         authListener();
@@ -42,7 +42,7 @@ export default function App() {
 }
 
 const containerStyle = css`
-  background-color: ${theme.colors.darkYellow};
+  background-color: ${theme.colors.middleYellow};
   position: fixed;
   top: 0;
   left: 50%;

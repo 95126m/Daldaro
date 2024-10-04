@@ -4,12 +4,17 @@ import { doc, getDoc } from 'firebase/firestore'
 import { useNavigate } from 'react-router-dom'
 import { css } from '@emotion/react'
 import theme from '@/styles/Theme'
-import logo from '@/assets/logo-yellow.png'
-import { BiPlus } from "react-icons/bi"
+import { useHeaderStore } from '@/stores/header'
+import { BiPencil } from "react-icons/bi";
 
 export default function Home() {
+  const setTitle = useHeaderStore(state => state.setTitle)
   const navigate = useNavigate()
   const [isAdmin, setIsAdmin] = useState<boolean>()
+
+  useEffect(() => {
+      setTitle('공지사항')
+  }, [setTitle])
   
   useEffect(() => {
     const checkAdminStatus = async () => {
@@ -25,13 +30,12 @@ export default function Home() {
   }, [])
   
   const handleAddBtn = () => {
-    navigate('/add-item')
+    navigate('/add-notice')
   }
 
   return (
     <div css={contentStyle}>
-      <img css={logoStyle} src={logo} alt="Logo" />
-      {isAdmin && <BiPlus onClick={handleAddBtn} css={addBtn} />}
+      {isAdmin && <BiPencil onClick={handleAddBtn} css={addBtn} />}
     </div>
   )
 }
@@ -44,15 +48,6 @@ const contentStyle = css`
   align-items: center;
   z-index: 2;
   `;
-
-const logoStyle = css`
-  position: fixed;
-  top: 5%;
-  left: 50%;
-  height: auto;
-  width:10rem;
-  transform: translate(-50%, -50%);
-`;
 
 const addBtn = css`
   position: fixed;

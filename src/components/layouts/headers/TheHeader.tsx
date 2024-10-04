@@ -10,7 +10,12 @@ type TheHeaderProps = {
 
 enum titleName {
   NewAccount = '회원가입',
-  Profile = '프로필'
+  Profile = '프로필',
+  Cart = '장바구니',
+  Search = '검색',
+  Notice = '공지사항',
+  AddItem = '상품 추가',
+  AddNotice = '게시글 추가'
 }
 
 export default function TheHeader({ onOpenModal }: TheHeaderProps) {
@@ -24,6 +29,9 @@ export default function TheHeader({ onOpenModal }: TheHeaderProps) {
       navigate(-1)
     }
   }
+  const handleBasicBackButton = () => {
+    navigate(-1)
+  }
 
   return (
     <header css={headerStyle}>
@@ -31,6 +39,13 @@ export default function TheHeader({ onOpenModal }: TheHeaderProps) {
         <CgChevronLeft
         css={iconStyle}
         onClick={handleBackClick}
+      />
+      )}
+      
+      {(title === titleName.AddItem || title === titleName.AddNotice) && (
+        <CgChevronLeft
+        css={iconStyle}
+        onClick={handleBasicBackButton}
       />
       )}
       <h1 css={titleStyle}>{title}</h1>
@@ -48,7 +63,7 @@ const headerStyle = css`
   top: 0;
   left: 50%;
   transform: translateX(-50%);
-  z-index: 9;
+  z-index: 8;
   color: ${theme.colors.black};
 `;
 

@@ -3,16 +3,16 @@ import { useHeaderStore } from '@/stores/header'
 import { css } from '@emotion/react'
 // import theme from '@/styles/Theme'
 
-export default function Home() {
+export default function AddItem() {
     const setTitle = useHeaderStore(state => state.setTitle)
 
     useEffect(() => {
-        setTitle('고객센터')
+        setTitle('상품 추가')
     }, [setTitle])
 
   return (
     <div css={contentStyle}>
-      <h1>고객센터</h1>
+      <h1>상품 추가</h1>
     </div>
   )
 }

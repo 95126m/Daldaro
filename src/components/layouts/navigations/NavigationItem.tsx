@@ -23,11 +23,14 @@ const NavigationItem = ({
       to={path}
       css={[navLinkStyle, customStyle]}
       onClick={onClick}
-      className={({ isActive }) => (isActive ? 'active' : undefined)}>
-      <div css={iconStyle}>
-        <Icon css={icon} />
-        {label}
-      </div>
+      className={({ isActive }) => (isActive ? 'active' : undefined)}
+    >
+      {({ isActive }) => (
+        <div css={iconStyle(isActive)}>
+          <Icon css={icon} />
+          {label}
+        </div>
+      )}
     </NavLink>
   )
 }
@@ -36,26 +39,21 @@ const navLinkStyle = css`
   text-decoration: none;
   color: inherit;
   cursor: pointer;
-  &.active {
-    div {
-      color: ${theme.colors.darkYellow};
-    }
-  }
-  &:hover {
-    div {
-      color: ${theme.colors.darkYellow};
-    }
-  }
 `
 
-const iconStyle = css`
+const iconStyle = (isActive: boolean) => css`
   display: flex;
   justify-content: center;
   align-items: center;
   flex-direction: column;
   font-size: ${theme.fontSize.xs};
-  color: ${theme.colors.middleGrey};
+  color: ${isActive ? theme.colors.darkYellow : theme.colors.middleGrey};
   gap: 4px;
+  transition: color 0.8s ease;
+
+  &.active {
+    color: ${theme.colors.darkYellow};
+  }
 `
 
 const icon = css`

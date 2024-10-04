@@ -58,7 +58,8 @@ const pageStyle = css`
 const profileStyle = css`
   height:150px;
   width: 150px;
-  margin-top: 40px;
+  margin-top: 9rem;
+  margin-bottom: 2rem;
   border-radius: 50%;
   object-fit:cover;
 `
@@ -71,12 +72,12 @@ const textStyle = css`
   padding-left: 3px;
 `
 const titleText = css`
-  color: ${theme.colors.black};
+  color: ${theme.colors.darkYellow};
   margin-bottom: 10px;
 `
 const inputText = css`
   color: ${theme.colors.grey};
 `
 const logoutBtn = css`
-  margin-top: 12em;
+  margin-top: 9em;
 `
