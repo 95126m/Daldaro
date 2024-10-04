@@ -1,4 +1,4 @@
-import { BiSolidHome, BiSolidCat } from "react-icons/bi";
+import { BiSolidHome, BiSolidCat, BiCart, BiHeadphone, BiSearch } from "react-icons/bi";
   import { css } from '@emotion/react'
   import theme from '@/styles/Theme'
   import NavigationItem from './NavigationItem'
@@ -22,15 +22,15 @@ import { BiSolidHome, BiSolidCat } from "react-icons/bi";
             />
             <NavigationItem
             path="/search"
-            Icon={BiSolidCat}
-            label="내 정보"
-            onClick={() => handleNavigation('/profile')}
+            Icon={BiSearch}
+            label="검색"
+            onClick={() => handleNavigation('/search')}
             />
             <NavigationItem
-            path="/profile"
-            Icon={BiSolidCat}
-            label="내 정보"
-            onClick={() => handleNavigation('/profile')}
+            path="/cart"
+            Icon={BiCart}
+            label="장바구니"
+            onClick={() => handleNavigation('/cart')}
             />
             <NavigationItem
             path="/profile"
@@ -39,10 +39,10 @@ import { BiSolidHome, BiSolidCat } from "react-icons/bi";
             onClick={() => handleNavigation('/profile')}
             />
                 <NavigationItem
-            path="/profile"
-            Icon={BiSolidCat}
-            label="내 정보"
-            onClick={() => handleNavigation('/profile')}
+            path="/service"
+            Icon={BiHeadphone}
+            label="고객센터"
+            onClick={() => handleNavigation('/service')}
           />
         </ul>
       </nav>
