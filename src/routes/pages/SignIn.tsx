@@ -67,7 +67,7 @@ export default function SignIn() {
 
   const handleNewAccount = () => {
     navigate('/new-account')
-    }
+  }
     
   const StyledToastContainer = styled(ToastContainer)`
     .Toastify__toast {
@@ -135,19 +135,6 @@ const containerStyle = css`
   background-color: ${theme.colors.white};
   height: 100%;
   overflow-y: auto;
-  &::before {
-    content: '';
-    position: absolute;
-    top: 47%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    width: 500px;
-    height: 100%;
-    background-size: contain;
-    background-repeat: no-repeat;
-    background-position: center;
-    z-index: 0;
-  }
 `;
 
 const contentStyle = css`
@@ -203,10 +190,10 @@ const floatingAnimation = css`
 const logoStyle = css`
   position: absolute;
   top: 20%;
-  left: 50%;
-  height: auto;
-  width: 20rem;
-  transform: translate(-50%, -50%);
+  height: 60px;
+  object-fit: contain;
+  width: 100%;
+  // transform: translate(-50%, -50%);
   ${floatingAnimation};
 `;
 

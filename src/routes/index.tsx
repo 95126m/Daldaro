@@ -30,9 +30,9 @@ export const router = createBrowserRouter([
           { path: '/service', element: <Service /> },
         ],
       },
-      { path: '/new-account', element: <NewAccount /> }, 
     ],
   },
+  { path: '/new-account', element: <NewAccount /> }, 
   { path: '/sign-in', element: <SignIn /> },
   { path: '*', element: <NotFound /> },
 ]);
