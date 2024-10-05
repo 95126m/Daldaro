@@ -33,7 +33,7 @@ export default function Profile() {
             />
             <div css={textStyle}>
               <div css={titleText}>닉네임</div>
-              <div css={inputText}>{user.displayName}</div>
+              <div css={inputText}>{user.displayName || ''}</div>
             </div>
             <div css={textStyle}>
               <div css={titleText}>이메일</div>

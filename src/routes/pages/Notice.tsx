@@ -5,7 +5,7 @@ import { useNavigate } from 'react-router-dom'
 import { css } from '@emotion/react'
 import theme from '@/styles/Theme'
 import { useHeaderStore } from '@/stores/header'
-import { BiPencil } from "react-icons/bi";
+import { BiPlus } from "react-icons/bi"
 
 export default function Home() {
   const setTitle = useHeaderStore(state => state.setTitle)
@@ -35,36 +35,47 @@ export default function Home() {
 
   return (
     <div css={contentStyle}>
-      {isAdmin && <BiPencil onClick={handleAddBtn} css={addBtn} />}
+      <div css={formInput}>
+      </div>
+      {isAdmin && <BiPlus onClick={handleAddBtn} css={addBtn} />}
     </div>
   )
 }
 
 const contentStyle = css`
+  display: flex;  
   width: 100%;
   height: auto;
-  display: flex;
   justify-content: center;
   align-items: center;
-  z-index: 2;
   `;
 
+const formInput = css`
+  display: flex;
+  position: fixed;
+  top: 7rem;
+  width: 23rem;
+  height: 40rem;
+  border-top: 1px solid ${theme.colors.darkYellow};
+  border-bottom: 1px solid ${theme.colors.darkYellow};
+  justify-content: center;
+  align-items: center;
+`;
+
 const addBtn = css`
+  z-index: 3;
   position: fixed;
   left: 69rem;
   top: 48rem;
   border: none;
-  width: 40px;
-  height: 40px;
+  width: 45px;
+  height: 45px;
   color: ${theme.colors.white};
   border-radius: 30%;
   background-color: ${theme.colors.middleYellow};
   cursor: pointer;
-  transition: width 0.4s ease, height 0.4s ease, background-color 2s ease;
-
+  transition: transform 0.7s ease;
   :hover {
-    background-color: ${theme.colors.darkYellow};
-    width: 45px;
-    height: 45px;
+    transform: rotate(180deg);
   }
-`
+`;
