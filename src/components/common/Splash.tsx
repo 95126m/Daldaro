@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import { onAuthStateChanged } from 'firebase/auth'
 import { auth } from '@/api/firebaseApp'
 import { css } from '@emotion/react'
+import SplashLogo from '@/assets/splash-cat.gif'
 import Logo from '@/assets/logo-white.png'
 import theme from '@/styles/Theme'
 
@@ -31,6 +32,10 @@ export default function App() {
         {isSplash && (
           <div css={containerStyle}>
             <img
+              src={SplashLogo}
+              css={SplashLogoStyle}
+            />
+            <img
               src={Logo}
               css={logoStyle}
             />
@@ -54,28 +59,22 @@ const containerStyle = css`
   overflow: hidden;
   justify-content: center;
   align-items: center;
+  flex-direction: column;
   z-index: 9;
-`
-const floatingAnimation = css`
-  @keyframes floating {
-    0% {
-      transform: translateY(0);
-    }
-    50% {
-      transform: translateY(-20px); 
-    }
-    100% {
-      transform: translateY(0); 
-    }
-  }
-  animation: floating 3s ease-in-out infinite;
+`;
+
+const SplashLogoStyle = css`
+  height: auto;
+  width: 280px;
+  text-align: center;
+  position: relative;
+  bottom: 4rem; 
 `;
 
 const logoStyle = css`
-  height: 60px;
-  width: 200px;
+  height: auto;
+  width: 300px;
   text-align: center;
-  z-index: 2;
-  ${floatingAnimation}
-  `
-
+  position: absolute;
+  bottom: 22rem; 
+`;

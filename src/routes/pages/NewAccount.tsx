@@ -1,13 +1,11 @@
 import { useState, useRef, useEffect } from 'react'
-import { updateProfilePhoto, signUpWithEmailAndPassword } from '@/api/firebaseAuth'
+import { signUpWithEmailAndPassword } from '@/api/firebaseAuth'
 import { useNavigate } from 'react-router-dom'
 import { useHeaderStore } from '@/stores/header'
 import LongButton from '@/components/common/LongButton'
 import { css } from '@emotion/react'
 import theme from '@/styles/Theme'
 import { FaCamera } from 'react-icons/fa'
-import { doc, setDoc } from 'firebase/firestore'
-import { db } from '@/api/firebaseApp'
 import Modal from '@/components/common/Modal'
 import TheHeader from '@/components/layouts/headers/TheHeader'
 
@@ -40,32 +38,27 @@ export default function NewAccount() {
   }, [displayName, email, previewPhoto])
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault()
-    if (!displayName || !email || !previewPhoto) return
-    try {
-      // 회원가입 진행
-      const signedUpUser = await signUpWithEmailAndPassword(email, password, displayName)
-      
-      // Firestore에 사용자 정보 저장
-      await setDoc(doc(db, 'Users', signedUpUser.uid), {
-        displayName,
-        email,
-        uid: signedUpUser.uid,
-        photoURL: previewPhoto || '',
-        createdAt: new Date(),
-      })
-
-      if (file) {
-        const photoURL = await updateProfilePhoto(signedUpUser.uid, file)
-        setPreviewPhoto(photoURL);
-      }
-
-      navigate('/sign-in', {state: { showToast: true }})
-    } catch (err) {
-      setError('회원가입 실패!')
-      console.error(err)
+    e.preventDefault();
+    
+    // 필수 입력값 확인
+    if (!displayName || !email || !password || !file) {
+      setError("모든 필드를 채워주세요.");
+      return;
     }
-  }
+  
+    try {
+      // 회원가입 및 프로필 사진 업로드 진행
+      await signUpWithEmailAndPassword(email, password, displayName, file);
+      
+      // 회원가입이 완료되면 로그인 페이지로 이동
+      navigate('/sign-in', { state: { showToast: true } });
+    } catch (err) {
+      setError('회원가입 실패!');
+      console.error(err);
+    }
+  };
+  
+  
 
   const handlePhotoClick = () => {
     if (fileInputRef.current) {
@@ -147,6 +140,7 @@ export default function NewAccount() {
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             css={inputStyle}
+            autoComplete="new-password"
           />
         </div>
         {error && <p>{error}</p>}

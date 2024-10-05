@@ -6,10 +6,12 @@ import { css } from '@emotion/react'
 import theme from '@/styles/Theme'
 import logo from '@/assets/logo-yellow.png'
 import { BiPlus } from "react-icons/bi"
+import Category from '@/components/common/Category'
 
 export default function Home() {
   const navigate = useNavigate()
   const [isAdmin, setIsAdmin] = useState<boolean>()
+  const [selectedCategory, setSelectedCategory] = useState<string[]>(['전체'])
   
   useEffect(() => {
     const checkAdminStatus = async () => {
@@ -23,6 +25,12 @@ export default function Home() {
     }
     checkAdminStatus()
   }, [])
+
+  useEffect(() => {
+    if (selectedCategory.length === 0) {
+      setSelectedCategory(['전체'])
+    }
+  }, [selectedCategory])
   
   const handleAddBtn = () => {
     navigate('/add-item')
@@ -31,6 +39,7 @@ export default function Home() {
   return (
     <div css={contentStyle}>
       <img css={logoStyle} src={logo} alt="Logo" />
+      <div css={categoryWrap}><Category selectedCategory={selectedCategory} setSelectedCategory={setSelectedCategory} /></div>  
       {isAdmin && <BiPlus onClick={handleAddBtn} css={addBtn} />}
     </div>
   )
@@ -47,29 +56,31 @@ const contentStyle = css`
 
 const logoStyle = css`
   position: fixed;
-  top: 5%;
+  top: 5.5%;
   left: 50%;
   height: auto;
   width:10rem;
   transform: translate(-50%, -50%);
 `;
 
+const categoryWrap = css`
+  margin-top: 6rem; 
+`;
+
 const addBtn = css`
+  z-index: 3;
   position: fixed;
   left: 69rem;
   top: 48rem;
   border: none;
-  width: 40px;
-  height: 40px;
+  width: 45px;
+  height: 45px;
   color: ${theme.colors.white};
   border-radius: 30%;
   background-color: ${theme.colors.middleYellow};
   cursor: pointer;
-  transition: width 0.4s ease, height 0.4s ease, background-color 2s ease;
-
+  transition: transform 0.7s ease;
   :hover {
-    background-color: ${theme.colors.darkYellow};
-    width: 45px;
-    height: 45px;
+    transform: rotate(180deg);
   }
-`
+`;

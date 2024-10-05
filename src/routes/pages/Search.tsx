@@ -39,7 +39,7 @@ export default function Home() {
 
 const contentStyle = css`
   position: relative;
-  margin-top: 95%;
+  margin-top: 5rem;
   width: 100%;
   height: auto;
   display: flex;

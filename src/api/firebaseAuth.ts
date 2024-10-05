@@ -3,12 +3,33 @@ import { createUserWithEmailAndPassword, signInWithEmailAndPassword, GoogleAuthP
 import { doc, setDoc, getDoc, updateDoc } from 'firebase/firestore';
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 import { FirebaseError } from 'firebase/app';
+import { updateProfile } from 'firebase/auth';
 
-// 이메일과 비밀번호로 회원가입
-export const signUpWithEmailAndPassword = async (email: string, password: string, displayName: string) => {
+export const signUpWithEmailAndPassword = async (
+  email: string, 
+  password: string, 
+  displayName: string, 
+  profilePhoto?: File  
+): Promise<UserCredential> => {
   try {
+    // Firebase Auth에 사용자 생성
     const userCredential: UserCredential = await createUserWithEmailAndPassword(auth, email, password);
     const user = userCredential.user;
+
+    // 프로필 사진을 업로드한 경우 처리
+    let photoURL = '/src/assets/default-profile.jpg';  // 기본 프로필 사진 설정
+
+    if (profilePhoto) {
+      const storageRef = ref(storage, `profilePhotos/${user.uid}/${profilePhoto.name}`);
+      await uploadBytes(storageRef, profilePhoto);  // 사진 업로드
+      photoURL = await getDownloadURL(storageRef);  // 업로드된 사진 URL 가져오기
+    }
+
+    // Firebase Auth 프로필 업데이트 (displayName 및 photoURL 설정)
+    await updateProfile(user, {
+      displayName: displayName,
+      photoURL: photoURL
+    });
 
     // Firestore에 사용자 정보 저장
     await setDoc(doc(db, 'Users', user.uid), {
@@ -16,10 +37,10 @@ export const signUpWithEmailAndPassword = async (email: string, password: string
       email: user.email,
       userId: user.uid,
       createdAt: new Date(),
-      photoURL: user.photoURL || '', // 프로필 사진이 없으면 빈 문자열
+      photoURL: photoURL,  // Firestore에 프로필 사진 URL 저장
     });
 
-    return user;
+    return userCredential;  // UserCredential 객체 반환
   } catch (error) {
     console.error('회원가입 중 오류 발생:', error);
     throw error;
@@ -86,7 +107,7 @@ export const signInWithGoogleAndCreateUser = async () => {
         displayName: user.displayName,
         email: user.email,
         userId: user.uid,
-        photoURL: user.photoURL || '',
+        photoURL: user.photoURL || '/src/assets/default-profile.jpg',
         createdAt: new Date(),
       });
     }
